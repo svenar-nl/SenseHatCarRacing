@@ -73,6 +73,9 @@ class Car:
 def mapval(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
+sense.show_message("Car racer!", 0.04, (60, 255, 70))
+sense.show_message("Get ready...", 0.04, (255, 60, 70))
+
 while(1):
     draw_player()
     draw_cars()
@@ -85,14 +88,17 @@ while(1):
     pitch = int(mapval(rawpitch, -25, 25, 0, 7))
     pitch = pitch if pitch > 0 else 0
     pitch = pitch if pitch < 8 else 7
-    print(rawpitch)
-    print(pitch)
     player_x = pitch
     
     if random.randint(0, 100) < 25:
         if len(cars) < target_num_cars:
             newCar = Car()
             cars.append(newCar)
+            
+            if random.randint(0, 100) < 25:
+                newCar = Car()
+                newCar.x = player_x
+                cars.append(newCar)
     
     tmp_cars = cars
     for car in cars:
