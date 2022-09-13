@@ -12,6 +12,7 @@ game_speed = 7
 
 cars = []
 target_num_cars = 3
+high_score = 0
 total_cars_passed = 0
 
 def draw_player():
@@ -35,16 +36,23 @@ def draw_cars():
     global cars
     global total_cars_passed
     global game_speed
+    global high_score
     
     for car in cars:
-        if car.y < 8:
+        if car.y >= 0 and car.y < 8:
             sense.set_pixel(car.x, car.y, car.color)
-        if car.y - 1 > 0 and car.y - 1 < 8:
+        if car.y - 1 >= 0 and car.y - 1 < 8:
             sense.set_pixel(car.x, car.y - 1, car.color)
             
         if car.x == player_x and 8 > car.y > 5:
             sense.show_message("Helaas!", 0.04, (60, 255, 70))
+            sense.show_message("Score: ", 0.04, (60, 255, 70))
+            sense.show_message(str(total_cars_passed), 0.04, (255, 60, 70))
+            sense.show_message("Highscore: ", 0.04, (60, 255, 70))
+            sense.show_message(str(high_score), 0.04, (255, 60, 70))
             game_speed = 7
+            if total_cars_passed > high_score:
+                high_score = total_cars_passed
             total_cars_passed = 0
             cars = []
             break
@@ -53,7 +61,7 @@ def draw_cars():
 class Car:
     def __init__(self) -> None:
         self.x = random.randint(0, 7)
-        self.y = 0
+        self.y = -1
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.passed = False
        
@@ -62,12 +70,24 @@ class Car:
     sense.stick.direction_right = move_right
     sense.stick.direction_left = move_left
 
-
+def mapval(x, in_min, in_max, out_min, out_max):
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 while(1):
     draw_player()
     draw_cars()
     time.sleep(1 / game_speed)
+    
+    orientation = sense.get_orientation()
+    rawpitch = round(orientation["pitch"], 0)
+    rawpitch = rawpitch if rawpitch < 180 else rawpitch - 360
+    rawpitch = -rawpitch
+    pitch = int(mapval(rawpitch, -25, 25, 0, 7))
+    pitch = pitch if pitch > 0 else 0
+    pitch = pitch if pitch < 8 else 7
+    print(rawpitch)
+    print(pitch)
+    player_x = pitch
     
     if random.randint(0, 100) < 25:
         if len(cars) < target_num_cars:
