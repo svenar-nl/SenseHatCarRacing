@@ -44,6 +44,7 @@ def draw_cars():
         sense.show_message("Helaas!")
     
     
+    
        
         
 # Main Program ----------------------
