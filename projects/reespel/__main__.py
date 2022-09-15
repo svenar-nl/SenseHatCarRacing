@@ -38,21 +38,23 @@ def draw_cars():
     global game_speed
     global high_score
     
+    print("x {0}".format(cars))
     for car in cars:
+        
         if car.y >= 0 and car.y < 8:
             sense.set_pixel(car.x, car.y, car.color)
         if car.y - 1 >= 0 and car.y - 1 < 8:
             sense.set_pixel(car.x, car.y - 1, car.color)
             
         if car.x == player_x and 8 > car.y > 5:
+            if total_cars_passed > high_score:
+                high_score = total_cars_passed
             sense.show_message("Helaas!", 0.04, (60, 255, 70))
             sense.show_message("Score: ", 0.04, (60, 255, 70))
             sense.show_message(str(total_cars_passed), 0.04, (255, 60, 70))
             sense.show_message("Highscore: ", 0.04, (60, 255, 70))
             sense.show_message(str(high_score), 0.04, (255, 60, 70))
             game_speed = 7
-            if total_cars_passed > high_score:
-                high_score = total_cars_passed
             total_cars_passed = 0
             cars = []
             break
@@ -110,7 +112,7 @@ while(1):
             car.passed = True
     cars = tmp_cars
     
-    print("Cars passed: " + str(total_cars_passed) + " speed: " + str(game_speed))
+    #print("Cars passed: " + str(total_cars_passed) + " speed: " + str(game_speed))
     if total_cars_passed > 0 and total_cars_passed < 50 and total_cars_passed % 10 == 0:
         sense.show_message("Speed up!", 0.04, (60, 255, 70))
         game_speed += 1
