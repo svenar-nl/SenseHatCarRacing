@@ -45,14 +45,14 @@ def draw_cars():
             sense.set_pixel(car.x, car.y - 1, car.color)
             
         if car.x == player_x and 8 > car.y > 5:
+            if total_cars_passed > high_score:
+                high_score = total_cars_passed
             sense.show_message("Helaas!", 0.04, (60, 255, 70))
             sense.show_message("Score: ", 0.04, (60, 255, 70))
             sense.show_message(str(total_cars_passed), 0.04, (255, 60, 70))
             sense.show_message("Highscore: ", 0.04, (60, 255, 70))
             sense.show_message(str(high_score), 0.04, (255, 60, 70))
             game_speed = 7
-            if total_cars_passed > high_score:
-                high_score = total_cars_passed
             total_cars_passed = 0
             cars = []
             break
